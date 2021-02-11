@@ -1,5 +1,7 @@
+from colorama import Fore, Back, Style
+
 class Surface():
-    def __init__(self, start, end, out):
+    def __init__(self, start, end, out, bcolor=None, fcolor=None):
         """
         initialising a basic surface class
 
@@ -15,18 +17,43 @@ class Surface():
         self.start = start
         self.end = end
         self.out = out
+        if not bcolor: 
+            self.bcolor = Back.RESET
+        else:
+            self.bcolor = bcolor
 
-    def draw(self, fill, color):
+        if not fcolor: 
+            self.fcolor = Fore.RESET
+        else:
+            self.fcolor = fcolor
+
+    def draw(self, screen, fill=None):
         """
         draws the box on screen
 
         input prams:
+            screen:
+                the screen to add the surface on
             fill:
                 input text to the box
-            color:
-                color to make the box
         """
-        pass
+        x1, y1 = self.start
+        x2, y2 = self.end
+
+        def color_string():
+            return self.bcolor + self.fcolor + ' ' + Style.RESET_ALL
+        
+        screen[y1][x1] = color_string()
+        screen[y1][x2] = color_string()
+        screen[y2][x1] = color_string()
+        screen[y2][x2] = color_string()
+        
+        for i in range(x1+1, x2):
+            screen[y1][i] = color_string()
+            screen[y2][i] = color_string()
+        for j in range(y1+1, y2):
+            screen[j][x1] = color_string()
+            screen[j][x2] = color_string()
 
     def check_collision(self, x3, y3):
         """
