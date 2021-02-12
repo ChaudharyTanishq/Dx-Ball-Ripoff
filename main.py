@@ -7,8 +7,9 @@ from Input import Get, input_to
 
 getch = Get()
 frame = Frame()
+frame.draw(SCREEN)
 bar = Bar()
-game = Game(SCREEN, frame, bar)
+game = Game(SCREEN, bar)
 
 while True:
     c = input_to(getch)
