@@ -1,9 +1,14 @@
-from Surface import Surface
+from Components.Surface import Surface
+
 from config import (
     INIT_BAR_START, 
     INIT_BAR_END,
-    BAR_SPEED
+    BAR_SPEED,
+    BAR_BCOLOR,
+    BAR_FCOLOR,
+    SCREEN_WIDTH
 )
+
 
 class Bar(Surface):
     def __init__(self):
@@ -15,7 +20,9 @@ class Bar(Surface):
         super().__init__(
             start=INIT_BAR_START,
             end=INIT_BAR_END,
-            out=True
+            out=True,
+            bcolor=BAR_BCOLOR,
+            fcolor=BAR_FCOLOR,
         )
 
         # stores a list of powerup tuples,
@@ -66,6 +73,14 @@ class Bar(Surface):
         # updating x positions
         x1 = x1 + left*BAR_SPEED
         x2 = x2 + left*BAR_SPEED
+
+        # checking validity of x positions
+        while x1 < 1:
+            x1 += 1
+            x2 += 1
+        while x2 > SCREEN_WIDTH-2:
+            x1 -= 1
+            x2 -= 1
 
         # saving the values
         self.start = (x1, y1)
