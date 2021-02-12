@@ -4,13 +4,13 @@ import random
 from colorama import Fore, Back, Style
 
 # SCREEN PARAMETERS
-SCREEN_WIDTH = 100
+SCREEN_WIDTH = 42
 SCREEN_HEIGHT = 24
 SCREEN = []
 for i in range(SCREEN_HEIGHT):
     SCREEN.append([' ' for _ in range(SCREEN_WIDTH)])
-SCREEN_BCOLOR = Back.BLACK
-SCREEN_FCOLOR = Fore.BLACK
+FRAME_BCOLOR = Back.BLACK
+FRAME_FCOLOR = Fore.BLACK
 
 # BAR PARAMETERS
 bar_start_x = random.randint(10, SCREEN_WIDTH-10)
