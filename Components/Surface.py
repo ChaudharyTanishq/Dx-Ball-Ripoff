@@ -27,33 +27,35 @@ class Surface():
         else:
             self.fcolor = fcolor
 
-    def draw(self, screen, fill=None):
+
+    def color_string(self, reset):
+        color = ' ' if reset else self.bcolor + self.fcolor + ' '
+        return color + Style.RESET_ALL
+    
+    def draw(self, screen, reset=False):
         """
         draws the box on screen
 
         input prams:
             screen:
                 the screen to add the surface on
-            fill:
-                input text to the box
+            reset:
+                instead of colouring, just removes the object
         """
         x1, y1 = self.start
         x2, y2 = self.end
 
-        def color_string():
-            return self.bcolor + self.fcolor + ' ' + Style.RESET_ALL
-        
-        screen[y1][x1] = color_string()
-        screen[y1][x2] = color_string()
-        screen[y2][x1] = color_string()
-        screen[y2][x2] = color_string()
+        screen[y1][x1] = self.color_string(reset)
+        screen[y1][x2] = self.color_string(reset)
+        screen[y2][x1] = self.color_string(reset)
+        screen[y2][x2] = self.color_string(reset)
         
         for i in range(x1+1, x2):
-            screen[y1][i] = color_string()
-            screen[y2][i] = color_string()
+            screen[y1][i] = self.color_string(reset)
+            screen[y2][i] = self.color_string(reset)
         for j in range(y1+1, y2):
-            screen[j][x1] = color_string()
-            screen[j][x2] = color_string()
+            screen[j][x1] = self.color_string(reset)
+            screen[j][x2] = self.color_string(reset)
 
     def check_collision(self, x3, y3):
         """
