@@ -10,13 +10,22 @@ class Ball():
         self.fcolor = BALL_FCOLOR
         self.over = False
     
+    def reset(self):
+        """
+        resets the mouse pointer to 1, 1
+        """
+        print(f'\033[{SCREEN_HEIGHT};{0}H', end='')
+        print()
+    
     def color_string(self, reset):
         color = ' ' if reset else self.bcolor + self.fcolor + 'O'
         return color + Style.RESET_ALL
 
-    def draw(self, screen, reset=False):
+    def draw(self, reset=False):
         x, y = self.position
-        screen[y][x] = self.color_string(reset)
+        print(f'\033[{y+1};{x+1}H', end='')
+        print(self.color_string(reset))
+        self.reset()
 
     def move(self):
         x, y = self.position
