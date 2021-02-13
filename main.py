@@ -1,13 +1,17 @@
+from Components.Frame import Frame
 from Helpers.main import Game
 
 from config import SCREEN
 from Input import Get, input_to
 
-import time
 import os
 
 getch = Get()
-game = Game(SCREEN)
+os.system('clear')
+frame = Frame()
+# leaving a permanent mark
+frame.draw(SCREEN)
+game = Game(frame)
 for row in SCREEN:
     for char in row:
         print(char, end="")
