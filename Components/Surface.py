@@ -30,41 +30,35 @@ class Surface():
 
 
     def color_string(self, reset):
-        print(f'\033[{self.start[1]+1};{self.start[0]+1}H', end='')
-        print(f"reset {self.start[1]+1}, {self.start[0]+1}")
         color = None 
         if reset:
             color = ' '
-            # color = f'\033[{self.start[1]};{self.start[0]}H'
         else:
-            # color = f'\033[{self.start[1]+1};{self.start[0]+1}H' + self.bcolor + self.fcolor + ' '
             color = self.bcolor + self.fcolor + ' '
         return color + Style.RESET_ALL
     
-    def draw(self, screen, reset=False):
+    def draw(self, screen):
         """
-        draws the box on screen
+        drawing the frame on the screen.
 
-        input prams:
-            screen:
-                the screen to add the surface on
-            reset:
-                instead of colouring, just removes the object
+        this is the default case of burning on the screen.
         """
         x1, y1 = self.start
         x2, y2 = self.end
-        print(f'\033[{self.start[1]+1};{self.start[0]+1}H', end='')
-        for i in range(x1, x2):
-            for j in range(y1, y2):
-                print(self.bcolor + self.fcolor + ' ' + Style.RESET_ALL, end="")
-            print()
+        
+        for i in range(x1, x2+1):
+            screen[y1][i] = self.color_string(False)
+            screen[y2][i] = self.color_string(False)
+        for j in range(y1, y2+1):
+            screen[j][x1] = self.color_string(False)
+            screen[j][x2] = self.color_string(False)
 
-        # for i in range(x1, x2+1):
-        #     screen[y1][i] = self.color_string(reset)
-        #     screen[y2][i] = self.color_string(reset)
-        # for j in range(y1, y2+1):
-        #     screen[j][x1] = self.color_string(reset)
-        #     screen[j][x2] = self.color_string(reset)
+    def reset(self):
+        """
+        resets the mouse pointer to 1, 1
+        """
+        print(f'\033[{SCREEN_HEIGHT};{0}H', end='')
+        print()
 
     def check_collision(self, ball):
         """
@@ -82,14 +76,18 @@ class Surface():
         x1, y1 = self.start
         x2, y2 = self.end
         x3, y3 = ball.position
-        # print(x1, x2, x3)
+        x_v, y_v = ball.velocity
+        nx3 = x3 + x_v
+        ny3 = y3 + y_v
+        # print(x1, x2, x3, x_v, nx3, end='\n\n')
+        
         if not self.out:
-            if x1+1 == x3 or x2-1 == x3:
+            if x1+1 >= nx3 or x2-1 <= nx3:
                 return 'x'
             if y1+1 == y3 or y2-1 == y3:
                 return 'y'
         else:
-            if x1 <= x3 <= x2 and (y3+1 == y1 or y2 == y3):
+            if x1 <= nx3 <= x2 and (y3+1 == y1 or y2 == y3):
                 return 'y'
             if y1 == y3 and (x1 == x3+1 or x2 == x3):
                 return 'x'
