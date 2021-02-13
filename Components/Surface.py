@@ -1,3 +1,4 @@
+from config import SCREEN_HEIGHT
 from colorama import Fore, Back, Style
 
 class Surface():
@@ -57,34 +58,53 @@ class Surface():
             screen[j][x1] = self.color_string(reset)
             screen[j][x2] = self.color_string(reset)
 
-    def check_collision(self, x3, y3):
+    def check_collision(self, ball):
         """
         checks if a collision has occured with the box or not
 
         input prams:
-            (x3, y3): 
-                the location of the point object which has to be
-                checked for collision. 
-                This restricts to be of size 1x1.
+            ball:
+                the ball object
         
         return:
-            bool, False if no collision, True if collision
-
+            'x', if along 'x' axis,
+            'y', if along 'y' axis,
+            None if no collision. 
         """
-        pass
+        x1, y1 = self.start
+        x2, y2 = self.end
+        x3, y3 = ball.position
+        if not self.out:
+            if x1+1 == x3 or x2-1 == x3:
+                return 'x'
+            if y1+1 == y3 or y2-1 == y3:
+                return 'y'
+        else:
+            if x1 <= x3 <= x2 and (y3+1 == y1 or y2 == y3):
+                return 'y'
+            if y1 == y3 and (x1 == x3+1 or x2 == x3):
+                return 'x'
 
+        return None
+        
 
-    def handle_collision(self, x3, y3, bar, through):
+    def handle_collision(self, ball):
         """
         handles any collisions
 
         input prams:
-            (x3, y3): 
-                the location of the point object which has to be
-                collided with.
-            bar:
-                if the object is the bar
-            through:
-                if the object has to go through the surface
+            ball:
+                the ball object
         """
-        pass
+        # extracting ball's velocity
+        # collisions happen with positions only.
+        x_v, y_v = ball.velocity 
+        
+        direction = self.check_collision(ball)
+        if direction and direction == 'x':
+            x_v *= -1
+        elif direction and direction == 'y':
+            y_v *= -1
+
+        # saving ball's new velocity
+        ball.velocity = x_v, y_v
