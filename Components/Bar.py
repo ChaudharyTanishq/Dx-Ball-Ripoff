@@ -78,7 +78,7 @@ class Bar(Surface):
         while x1 < 1:
             x1 += 1
             x2 += 1
-        while x2 > SCREEN_WIDTH-2:
+        while x2 > SCREEN_WIDTH-1:
             x1 -= 1
             x2 -= 1
 
@@ -113,3 +113,20 @@ class Bar(Surface):
             ball.velocity = (x_v, y_v)
         
         return direction
+    
+    def draw(self, reset):
+        """
+        draws the box on screen
+
+        input prams:
+            reset:
+                instead of colouring, it decolours
+        """
+        x1, y1 = self.start
+        x2, y2 = self.end
+        print(f'\033[{y1+1};{x1+1}H', end='')
+        for _ in range(x1, x2):
+            print(self.color_string(reset), end='')
+        self.reset()
+        
+        
