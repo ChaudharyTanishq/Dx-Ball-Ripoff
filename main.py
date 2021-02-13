@@ -1,15 +1,17 @@
-from Components.Ball import Ball
 from Helpers.main import Game
-from Components.Bar import Bar
-from Components.Frame import Frame
 
 from config import SCREEN
 from Input import Get, input_to
 
 import time
+import os
 
 getch = Get()
 game = Game(SCREEN)
+for row in SCREEN:
+    for char in row:
+        print(char, end="")
+    print()
 
 while True:
     c = input_to(getch)
@@ -17,4 +19,3 @@ while True:
     if game.c == 'q': break
     if game.render():
         break
-    time.sleep(0.1)

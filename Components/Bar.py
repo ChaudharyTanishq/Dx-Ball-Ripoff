@@ -85,4 +85,31 @@ class Bar(Surface):
         # saving the values
         self.start = (x1, y1)
         self.end = (x2, y2)
-        return
+        return      
+
+    def handle_collision(self, ball):
+        """
+        handles the collisions
+
+        input prams:
+            ball:
+                the ball object
+        """
+        direction = super().handle_collision(ball)
+
+        if not direction:
+            return None
+        
+        # the logic for angled ball movements
+        if direction and direction == 'y':
+            x1, _ = self.start
+            x2, _ = self.end
+            x3, _ = ball.position
+            x_v, y_v = ball.velocity
+            centre = (x2+x1)//2
+            x_v = x3-centre
+            if x_v > 2: x_v = 2
+            if x_v < -2: x_v = -2
+            ball.velocity = (x_v, y_v)
+        
+        return direction

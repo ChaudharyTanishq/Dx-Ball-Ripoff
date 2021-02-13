@@ -1,4 +1,4 @@
-from config import SCREEN_HEIGHT
+from config import SCREEN_HEIGHT, SCREEN_WIDTH
 from colorama import Fore, Back, Style
 
 class Surface():
@@ -30,7 +30,15 @@ class Surface():
 
 
     def color_string(self, reset):
-        color = ' ' if reset else self.bcolor + self.fcolor + ' '
+        print(f'\033[{self.start[1]+1};{self.start[0]+1}H', end='')
+        print(f"reset {self.start[1]+1}, {self.start[0]+1}")
+        color = None 
+        if reset:
+            color = ' '
+            # color = f'\033[{self.start[1]};{self.start[0]}H'
+        else:
+            # color = f'\033[{self.start[1]+1};{self.start[0]+1}H' + self.bcolor + self.fcolor + ' '
+            color = self.bcolor + self.fcolor + ' '
         return color + Style.RESET_ALL
     
     def draw(self, screen, reset=False):
@@ -45,18 +53,18 @@ class Surface():
         """
         x1, y1 = self.start
         x2, y2 = self.end
+        print(f'\033[{self.start[1]+1};{self.start[0]+1}H', end='')
+        for i in range(x1, x2):
+            for j in range(y1, y2):
+                print(self.bcolor + self.fcolor + ' ' + Style.RESET_ALL, end="")
+            print()
 
-        screen[y1][x1] = self.color_string(reset)
-        screen[y1][x2] = self.color_string(reset)
-        screen[y2][x1] = self.color_string(reset)
-        screen[y2][x2] = self.color_string(reset)
-        
-        for i in range(x1+1, x2):
-            screen[y1][i] = self.color_string(reset)
-            screen[y2][i] = self.color_string(reset)
-        for j in range(y1+1, y2):
-            screen[j][x1] = self.color_string(reset)
-            screen[j][x2] = self.color_string(reset)
+        # for i in range(x1, x2+1):
+        #     screen[y1][i] = self.color_string(reset)
+        #     screen[y2][i] = self.color_string(reset)
+        # for j in range(y1, y2+1):
+        #     screen[j][x1] = self.color_string(reset)
+        #     screen[j][x2] = self.color_string(reset)
 
     def check_collision(self, ball):
         """
@@ -74,6 +82,7 @@ class Surface():
         x1, y1 = self.start
         x2, y2 = self.end
         x3, y3 = ball.position
+        # print(x1, x2, x3)
         if not self.out:
             if x1+1 == x3 or x2-1 == x3:
                 return 'x'
@@ -96,15 +105,20 @@ class Surface():
             ball:
                 the ball object
         """
+        direction = self.check_collision(ball)
+        # early return if no collision
+        if not direction:
+            return None
+        
         # extracting ball's velocity
         # collisions happen with positions only.
         x_v, y_v = ball.velocity 
         
-        direction = self.check_collision(ball)
-        if direction and direction == 'x':
+        if direction == 'x':
             x_v *= -1
-        elif direction and direction == 'y':
+        elif direction == 'y':
             y_v *= -1
 
         # saving ball's new velocity
         ball.velocity = x_v, y_v
+        return direction
