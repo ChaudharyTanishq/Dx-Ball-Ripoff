@@ -1,25 +1,24 @@
 from Components.Frame import Frame
 from Components.Bar import Bar
 from Components.Ball import Ball
+from cheat import CHEATS
 
 import os
 import time
 
 class Game():
-    def __init__(self, screen):
+    def __init__(self, frame):
         """
         input params:
             screen:
                 the screen to be used for drawing
         """
-        self.frame = Frame() # frame object
-        self.frame.draw(screen) # leaving the frame mark on the screen 
-        self.screen = screen # screen
-        
+        self.frame = frame
         self.bar = Bar() # bar object
         self.ball = Ball() # ball object
         self.c = None # the character that was inputted
-        self.cheat = None # handling cheat codes
+        self.cheats = CHEATS
+        self.cheat = None
         return        
 
     def handle_input(self, c):
@@ -30,18 +29,24 @@ class Game():
             self.c = c
         elif c == 'a' or c == 'd':
             self.c = c
-            self.bar.draw(self.screen, reset=True)
+            self.bar.draw(reset=True)
             self.bar.move(True if c == 'a' else False)
         elif c == ':':
             self.cheat = input("Enter cheat code: ")
-
+            if self.cheat in self.cheats:
+                self.cheats[self.cheat] = True
+                print("works!")
+            else:
+                print("YEET")
+                exit()
+                
     def handle_ball(self):
         """
         handles ball logic
         """
-        self.ball.draw(self.screen, reset=True)
+        self.ball.draw(reset=True)
         self.ball.move()
-        self.ball.draw(self.screen)
+        self.ball.draw()
     
     def handle_collisions(self):
         """
@@ -57,7 +62,7 @@ class Game():
 
         # adding the components
         # draws the bar/paddle
-        self.bar.draw(self.screen)
+        self.bar.draw(reset=False)
 
         # handles all the drawing logic for the ball
         self.handle_ball()
@@ -65,16 +70,9 @@ class Game():
         # handling all the collision logic
         self.handle_collisions()
 
-        # # printing the components on the screen
-        # os.system('clear')
-        # for row in self.screen:
-        #     for char in row:
-        #         print(char, end="")
-        #     print()
-
+        # pausing for a bit
         time.sleep(0.1)
-
-        # checking if the game is over or not
-        if self.cheat and self.cheat == "NO DIE":
+        
+        if self.cheats.get(self.cheat, False):
             return False
         return True if self.ball.over else False
