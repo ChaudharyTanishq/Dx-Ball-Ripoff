@@ -51,7 +51,9 @@ class Surface():
             screen[y2][i] = self.color_string(False)
         for j in range(y1, y2+1):
             screen[j][x1] = self.color_string(False)
+            screen[j][x1+1] = self.color_string(False)
             screen[j][x2] = self.color_string(False)
+            screen[j][x2-1] = self.color_string(False)
 
     def reset(self):
         """
@@ -79,19 +81,27 @@ class Surface():
         x_v, y_v = ball.velocity
         nx3 = x3 + x_v
         ny3 = y3 + y_v
-        # print(x1, x2, x3, x_v, nx3, end='\n\n')
         
         if not self.out:
-            if x1+1 >= nx3 or x2-1 <= nx3:
+            if (x_v<0 and x1+1 >= nx3) or (x2-1 <= nx3 and x_v>0):
                 return 'x'
-            if y1+1 == y3 or y2-1 == y3:
+            if (y_v<0 and y1 >= ny3) or (y2 <= ny3 and y_v>0):
                 return 'y'
         else:
-            if x1 <= nx3 <= x2 and (y3+1 == y1 or y2 == y3):
+            # print(x3, nx3, x1, x2)
+            assert y1 == y2
+            # up-side
+            if y_v and ny3 == y1 and x1<=nx3<=x2:
                 return 'y'
-            if y1 == y3 and (x1 == x3+1 or x2 == x3):
+            # down-side
+            elif y_v and ny3 == y2 and x1<=nx3<=x2:
+                return 'y'
+            # the only cases for out-ward facing surfaces is y1 == y2
+            elif x_v and nx3 == x2+1 and ny3 == y1:
                 return 'x'
-
+            elif x_v and nx3 == x1-1 and ny3 == y1:
+                return 'x'
+            
         return None
         
 
@@ -107,7 +117,6 @@ class Surface():
         # early return if no collision
         if not direction:
             return None
-        
         # extracting ball's velocity
         # collisions happen with positions only.
         x_v, y_v = ball.velocity 
