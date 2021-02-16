@@ -9,6 +9,7 @@ class Point():
         self.through = through
         self.bcolor = bcolor
         self.fcolor = fcolor
+        self.through = False
 
     # prepares for printing
     def set(self):

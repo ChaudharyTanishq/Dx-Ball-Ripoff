@@ -17,6 +17,7 @@ while True:
     if game.quit:
         break
 
+print("GAME OVER!")
 print("total time:", int(time.time()-start_time))
 print("total brick score:", game.score)
 print("total lives left:", game.lives)
