@@ -29,30 +29,51 @@ class Bar(Surface):
         # (NAME, frames_left) 
         # where NAME is the unique key deciding behaviour
         self.powerups = []
+
+    def draw(self, reset):
+        """
+        draws the box on screen
+
+        input prams:
+            reset:
+                instead of colouring, it decolours
+        """
+        x1, y1 = self.start
+        x2, y2 = self.end
+        assert y1 == y2
+        print(f'\033[{y1+1};{x1+1}H', end='')
+        for _ in range(x1, x2+1):
+            print(self.color_string(reset), end='')
+        self.reset()
+
+    def expand(self):
+        x1, y1 = self.start
+        x2, y2 = self.end
+        x1 -= 1
+        x2 += 1
+        self.start = x1, y1
+        self.end = x2, y2
     
-    def handle_powerup(name):
-        """
-        handles powerup addition to the bar.
-
-        input parameters:
-            name:
-                the unique key from which a powerup can be identified
-
-        NOTE: powerups have one letter size, to account for 
-        check_collision(), and make it behave like its a ball :P
-
-        NOTE 2: we actually don't care about handling this type 
-        of collision, since the powerup is 'absorbed' by the bar.
-        """
-        pass
+    def shrink(self):
+        x1, y1 = self.start
+        x2, y2 = self.end
+        if x2-x1+1 > 1:
+            x1 += 1
+            x2 -= 1
+        self.start = x1, y1
+        self.end = x2, y2
+    
+    def handle_powerup(self, name):
+        # removing name if already present
+        self.powerups = [(n, f) for n, f in self.powerups if n!=name]
+        # adding new powerup
+        self.powerups.append((name, 60))
 
     def handle_powerups(self):
-        """
-        decreases the frames left for each of the current powerups     
-        """
         new_powerups = []
         for powerup, frames_left in self.powerups:
-            new_powerups.append((powerup, frames_left-1))
+            if frames_left > 1:
+                new_powerups.append((powerup, frames_left-1))
         
         self.powerups = new_powerups
         return
@@ -75,10 +96,10 @@ class Bar(Surface):
         x2 = x2 + left*BAR_SPEED
 
         # checking validity of x positions
-        while x1 < 1:
+        while x1 < 2:
             x1 += 1
             x2 += 1
-        while x2 > SCREEN_WIDTH-1:
+        while x2 > SCREEN_WIDTH-2:
             x1 -= 1
             x2 -= 1
 
@@ -101,7 +122,7 @@ class Bar(Surface):
             return None
         
         # the logic for angled ball movements
-        if direction and direction == 'y':
+        if direction == 'y':
             x1, _ = self.start
             x2, _ = self.end
             x3, _ = ball.position
@@ -114,19 +135,6 @@ class Bar(Surface):
         
         return direction
     
-    def draw(self, reset):
-        """
-        draws the box on screen
 
-        input prams:
-            reset:
-                instead of colouring, it decolours
-        """
-        x1, y1 = self.start
-        x2, y2 = self.end
-        print(f'\033[{y1+1};{x1+1}H', end='')
-        for _ in range(x1, x2):
-            print(self.color_string(reset), end='')
-        self.reset()
         
         
