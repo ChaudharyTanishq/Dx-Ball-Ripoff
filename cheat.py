@@ -1,4 +1,6 @@
 CHEATS = {
     "NO DIE": False,
-    "SLOW": False
+    "SLOW": False,
+    "BIG BALLS": False,
+    "THROUGH": False
 }
