@@ -73,7 +73,7 @@ class Surface():
         direction = self.is_collided(point)
 
         if not direction:
-            return
+            return None
 
         # reflection logic        
         xv, yv = point.velocity 
