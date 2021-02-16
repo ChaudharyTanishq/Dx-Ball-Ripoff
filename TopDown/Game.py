@@ -1,3 +1,4 @@
+from Components.Bricks import Bricks
 import time
 from Components.Ball import Ball
 from Components.Frame import Frame
@@ -9,15 +10,22 @@ class Game():
         self.frame = Frame()
         self.bar = Bar()
         self.balls = [Ball((SCREEN_WIDTH//2, SCREEN_HEIGHT//2))]
+        self.bricks = Bricks()
         # variables needed for external use
         self.lives = 3
         self.score = 0
         self.quit = False
 
     # checks for winning condition
-    def check_ok(self):
-        if self.ball.over:
-            self.ball = None
+    def check_win(self):
+        flag = True
+        for brick in self.bricks.bricks:
+            if brick.strength != 4:
+                flag = False
+                break
+        
+        if flag:
+            self.quit = True
 
     # handles all kinds of inputs
     def handle_input(self, c):
@@ -70,8 +78,12 @@ class Game():
         for ball in self.balls:
             self.bar.handle_collided(ball)
             self.frame.handle_collided(ball)
+            self.bricks.handle_collided(ball)
 
     def render(self):
+        # checks if the game has been won or not
+        self.check_win()
+
         # yeets balls which die
         self.yeet_balls()
 
@@ -85,8 +97,12 @@ class Game():
         # COLLIDING THE OBJECTS
         self.handle_collisions()
 
+        # UPDATING THE SCORE
+        self.score = self.bricks.score
+
         # DRAW THE SHAPES
         # self.frame.draw()
         self.bar.draw()
         for ball in self.balls:
             ball.draw()
+        self.bricks.draw()
