@@ -33,7 +33,7 @@ class Surface():
             for __ in range(x1, x2+1):
                 print(self.color_string(reset), end='')
             print()
-        self.reset()
+        # self.reset()
 
     # returns the direction to be reflected
     # if nothing, returns ''
