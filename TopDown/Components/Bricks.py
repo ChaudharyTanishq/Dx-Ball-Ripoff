@@ -4,29 +4,33 @@ from Components.Brick import Brick
 class Bricks():
     def __init__(self):
         self.bricks = []
-        for i in range(1):
-            for j in range(1):
+        for i in range(5):
+            for j in range(5):
                 self.bricks.append(
                     Brick(
                         start=(4+BRICK_SIZE*j, i+3),
                         end=(4+BRICK_SIZE-1+BRICK_SIZE*j, i+3),
-                        strength=3-i
+                        strength=5-i
                     )
                 )
-        self.score = 0
     
+    # draws regardless of whether a brick is yeeted or not
     def draw(self):
-        new_bricks = []
         for brick in self.bricks:
-            if brick.yeet:
-                brick.draw(True)
-                del brick
-                self.score += 5
-            else:
-                brick.draw()
-                new_bricks.append(brick)
-        self.bricks = new_bricks
+            brick.draw()
+
+    # returns bricks who are neighbours
+    def find_neighbours(self, brick):
+        neighbours = []
+        return neighbours
+
+    def boom(self, brick):
+        neighbours = self.find_neighbours(brick)
+        for brick in neighbours:
+            brick.destroy()
 
     def handle_collided(self, point):
         for brick in self.bricks:
-            brick.handle_collided(point)
+            if brick.handle_collided(point):
+                self.boom(brick)
+            # brick.handle_collided(point)
