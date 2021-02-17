@@ -2,14 +2,15 @@ from config import SCREEN_HEIGHT
 from colorama import Style, Back, Fore
 
 class Point():
-    def __init__(self, symbol, position, through, bcolor=Back.RESET, fcolor=Fore.RESET):
+    def __init__(self, symbol, position, through, bcolor=Back.RESET, fcolor=Fore.RESET, velocity=(0, 1)):
         self.symbol = symbol
         self.position = position
-        self.velocity = (0, 1)
+        self.velocity = velocity
         self.through = through
         self.bcolor = bcolor
         self.fcolor = fcolor
         self.through = False
+        self.over = False
 
     # prepares for printing
     def set(self):
@@ -29,7 +30,7 @@ class Point():
     def draw(self, reset=False):
         self.set()
         print(self.color_string(reset))
-        self.reset()
+        # self.reset()
 
     # moves the point object
     def move(self):
@@ -48,3 +49,7 @@ class Point():
         
         self.velocity = (xv, yv)
         self.position = (x+xv, y+yv)
+        
+        _, y = self.position
+        if y >= SCREEN_HEIGHT-2:
+            self.over = True
