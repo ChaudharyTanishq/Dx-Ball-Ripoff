@@ -4,7 +4,7 @@ from Components.Brick import Brick
 class Bricks():
     def __init__(self):
         self.bricks = []
-        for i in range(5):
+        for i in range(2):
             for j in range(5):
                 self.bricks.append(
                     Brick(
@@ -19,15 +19,40 @@ class Bricks():
         for brick in self.bricks:
             brick.draw()
 
+    # returns true/false if points intersect or not
+    def intersect(self, start1, end1, start2, end2):
+        x1, y1 = start1
+        x2, y2 = end1
+        x3, y3 = start2
+        x4, y4 = end2
+
+        if x1<=x4<=x2 and (y1<=y4<=y2 or y1<=y3<=y4):
+            return True
+        if x1<=x3<=x2 and (y1<=y4<=y2 or y1<=y3<=y4):
+            return True
+        return False
+
     # returns bricks who are neighbours
-    def find_neighbours(self, brick):
+    def find_neighbours(self, cur_brick):
         neighbours = []
+        x1, y1 = cur_brick.start
+        x2, y2 = cur_brick.end
+        
+        for brick in self.bricks:
+            if self.intersect(
+                (x1-BRICK_SIZE, y1-BRICK_SIZE), (x2+BRICK_SIZE, y2+BRICK_SIZE), brick.start, brick.end
+            ):
+                neighbours.append(brick)
+        
         return neighbours
 
     def boom(self, brick):
         neighbours = self.find_neighbours(brick)
         for brick in neighbours:
-            brick.destroy()
+            if not brick.yeet:
+                if brick.destroy():
+                    self.boom(brick)
+
 
     def handle_collided(self, point):
         for brick in self.bricks:

@@ -37,7 +37,7 @@ class Brick(Surface):
         self.strength = strength
         self.yeet = False
 
-    def destroy(self, through):
+    def destroy(self, through=False):
         # if through ball, remove everything in path
         if through or self.strength == 1:
             self.yeet = True
@@ -47,6 +47,8 @@ class Brick(Surface):
             self.draw(True)
             self.draw()
         elif self.strength == 5:
+            # print('boom')
+            self.yeet = True
             return True
 
     def handle_collided(self, point):
