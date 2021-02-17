@@ -12,6 +12,28 @@ class Bar(Surface):
             fcolor=BAR_FCOLOR
         )
     
+    def grow(self):
+        x1, y1 = self.start
+        x2, y2 = self.end
+
+        if x2-x1+1 > 7:
+            return
+
+        self.start = x1-1, y1
+        self.end = x2+1, y2
+    
+    def shrink(self):
+        x1, y1 = self.start
+        x2, y2 = self.end
+        
+        if x2-x1+1 < 3:
+            return
+        
+        self.draw(True)
+        self.start = x1+1, y1
+        self.end = x2-1, y2
+        self.draw()
+    
     def move(self, left):
         x1, y1 = self.start
         x2, y2 = self.end
