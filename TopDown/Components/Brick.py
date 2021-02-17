@@ -46,6 +46,8 @@ class Brick(Surface):
             self.bcolor, self.fcolor = color_identifier(self.strength)
             self.draw(True)
             self.draw()
+        elif self.strength == 5:
+            return True
 
     def handle_collided(self, point):
         direction = super().handle_collided(point, (not point.through))
@@ -54,4 +56,4 @@ class Brick(Surface):
             return None
 
         # handles all kinds of destructions
-        self.destroy(point.through)
+        return self.destroy(point.through)
