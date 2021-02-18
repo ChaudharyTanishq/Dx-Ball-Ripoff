@@ -1,3 +1,4 @@
+import random
 from config import BRICK_SIZE
 from Components.Brick import Brick
 
@@ -10,7 +11,16 @@ class Bricks():
                     Brick(
                         start=(4+BRICK_SIZE*j, i+3),
                         end=(4+BRICK_SIZE-1+BRICK_SIZE*j, i+3),
-                        strength=5-i
+                        strength=random.randint(4, 5)
+                    )
+                )
+        for i in range(3):
+            for j in range(5):
+                self.bricks.append(
+                    Brick(
+                        start=(4+BRICK_SIZE*j, i+8),
+                        end=(4+BRICK_SIZE-1+BRICK_SIZE*j, i+8),
+                        strength=3-i
                     )
                 )
     
@@ -37,10 +47,11 @@ class Bricks():
         neighbours = []
         x1, y1 = cur_brick.start
         x2, y2 = cur_brick.end
-        
+        # radius = BRICK_SIZE
+        radius = 1
         for brick in self.bricks:
             if self.intersect(
-                (x1-BRICK_SIZE, y1-BRICK_SIZE), (x2+BRICK_SIZE, y2+BRICK_SIZE), brick.start, brick.end
+                (x1-radius, y1-radius), (x2+radius, y2+radius), brick.start, brick.end
             ):
                 neighbours.append(brick)
         
