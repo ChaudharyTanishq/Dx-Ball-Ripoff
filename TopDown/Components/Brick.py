@@ -41,6 +41,8 @@ class Brick(Surface):
         # if through ball, remove everything in path
         if through or self.strength == 1:
             self.yeet = True
+            if self.strength == 5:
+                return True
         elif 1 < self.strength < 4:
             self.strength -= 1
             self.bcolor, self.fcolor = color_identifier(self.strength)
