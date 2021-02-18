@@ -22,9 +22,11 @@ while True:
     set()
     print("lives:", game.lives, "score:", game.score, "time taken:", int(time.time()-start_time))
 
+os.system('clear')
 print("="*80)
 print("GAME OVER!")
 print("STATISTICS")
 print("total time:", int(time.time()-start_time))
 print("total brick score:", game.score)
 print("total lives left:", game.lives)
+print("="*80)
