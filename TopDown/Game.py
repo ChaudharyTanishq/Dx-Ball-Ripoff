@@ -12,16 +12,25 @@ class Game():
     def __init__(self):
         self.frame = Frame()
         self.bar = Bar()
-        self.balls = [Ball((SCREEN_WIDTH//2, SCREEN_HEIGHT//2))]
+        self.balls = [Ball(game_init=True)]
         self.bricks = Bricks()
         self.powerups = Powerups()
-        
-        self.sticky_balls = []
+        self.sticky_balls = [self.balls[0]]
 
         # variables needed for external use
         self.lives = 3
         self.score = 0
         self.quit = False
+
+    # YEETS everything from the screen
+    def cleanup(self):
+        for ball in self.balls:
+            ball.draw(True)
+        for brick in self.bricks.bricks:
+            brick.draw(True)
+        for powerup in self.powerups.powerups:
+            powerup.draw(True)
+        self.bar.draw(True)
 
     # checks for winning condition
     def check_win(self):
@@ -71,7 +80,22 @@ class Game():
                     ball.velocity = ball.saved_velocity
                 ball.saved_velocity = None
             self.sticky_balls = []
-
+        elif c == 'i':
+            for ball in self.balls:
+                ball.velocity = (0, -1)
+        elif c == 'k':
+            for ball in self.balls:
+                ball.velocity = (0, 1)
+        elif c == 'l':
+            for ball in self.balls:
+                ball.velocity = (1, 0)
+        elif c == 'j':
+            for ball in self.balls:
+                ball.velocity = (-1, 0)
+        elif c == ':':
+            if self.handle_cheats(input("Enter cheat: ")):
+                print("WRONG = YEET")
+                exit()
     # resets the game after all balls are lost
     def reset(self):
         # reducing lives
@@ -144,6 +168,7 @@ class Game():
             powerup.draw(True)
             powerup.move()
 
+    # returns true if nothing matches
     def handle_cheats(self, c):
         if c == 'G':
             self.bar.grow()
@@ -169,6 +194,8 @@ class Game():
         elif c == 'K':
             for ball in self.balls:
                 ball.sticky = True
+        else:
+            return True
 
     # handles all the collisions
     def handle_collisions(self):
