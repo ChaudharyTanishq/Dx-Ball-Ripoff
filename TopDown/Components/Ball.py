@@ -1,16 +1,26 @@
-from config import BAR_END, BAR_SPEED, BAR_START, SCREEN_HEIGHT
+from config import BAR_END, BAR_SPEED, BAR_START, SCREEN_HEIGHT, SCREEN_WIDTH
 from Components.Point import Point
 
 class Ball(Point):
-    def __init__(self, position, velocity=(0, 1)):
-        super().__init__(
-            symbol='⬤', 
-            position=position, 
-            through=False,
-            velocity=velocity
-        )
-        self.sticky = False
-        self.saved_velocity = None
+    def __init__(self, position=None, velocity=(0, 1), game_init=False):
+        if game_init:
+            super().__init__(
+                symbol='⬤',
+                position=(SCREEN_WIDTH//2, SCREEN_HEIGHT-5),
+                through=False,
+                velocity=(0, 0)
+            )            
+            self.sticky = True
+            self.saved_velocity = (0, -1)
+        else:
+            super().__init__(
+                symbol='⬤', 
+                position=position, 
+                through=False,
+                velocity=velocity
+            )
+            self.sticky = False
+            self.saved_velocity = None
 
     def fast(self):
         xv, yv = self.velocity
