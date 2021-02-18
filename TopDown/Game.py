@@ -15,7 +15,9 @@ class Game():
         self.balls = [Ball((SCREEN_WIDTH//2, SCREEN_HEIGHT//2))]
         self.bricks = Bricks()
         self.powerups = Powerups()
+        
         self.sticky_balls = []
+
         # variables needed for external use
         self.lives = 3
         self.score = 0
@@ -23,6 +25,14 @@ class Game():
 
     # checks for winning condition
     def check_win(self):
+        through = False
+        for ball in self.balls:
+            if ball.through:
+                through = True
+                break
+        if through:
+            self.quit = not len(self.bricks.bricks)
+
         flag = True
         for brick in self.bricks.bricks:
             if brick.strength != 4:

@@ -1,7 +1,7 @@
 from colorama import Fore, Back, Style
 
 SCREEN_WIDTH = 32
-SCREEN_HEIGHT = 24
+SCREEN_HEIGHT = 28
 
 SCREEN_BCOLOR = Back.BLACK
 SCREEN_FCOLOR = Fore.BLACK

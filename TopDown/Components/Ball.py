@@ -4,7 +4,7 @@ from Components.Point import Point
 class Ball(Point):
     def __init__(self, position, velocity=(0, 1)):
         super().__init__(
-            symbol='O', 
+            symbol='⬤', 
             position=position, 
             through=False,
             velocity=velocity
