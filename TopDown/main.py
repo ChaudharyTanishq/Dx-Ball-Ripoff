@@ -17,11 +17,14 @@ while True:
     game.handle_input(c)
     game.render()
     if game.quit:
+        game.cleanup()
         break
     set()
-    print("lives:", game.lives, "score:", game.score)
+    print("lives:", game.lives, "score:", game.score, "time taken:", int(time.time()-start_time))
 
+print("="*80)
 print("GAME OVER!")
+print("STATISTICS")
 print("total time:", int(time.time()-start_time))
 print("total brick score:", game.score)
 print("total lives left:", game.lives)
